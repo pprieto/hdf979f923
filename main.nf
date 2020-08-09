@@ -32,7 +32,7 @@ process first_joint_aggregation {
     output:
         tuple val(region), file("${fixed_region}_first_aggregation.vcf.gz") into sample_consensus_sites
     
-    beforeScript 'ulimit -n unlimited -u unlimited'
+    beforeScript 'sudo ulimit -n unlimited -u unlimited'
     
     script:   
     region = region.replaceAll(/\n/, "")
@@ -110,7 +110,7 @@ process second_joint_aggregation {
     output:
         tuple val(region), file("${fixed_region}_second_aggregation.vcf.gz"), file("${fixed_region}_second_aggregation.vcf.gz.tbi") into merge_samples
 
-    beforeScript 'ulimit -n unlimited -u unlimited'
+    beforeScript 'sudo ulimit -n unlimited -u unlimited'
 
     script:
     region = region.replaceAll(/\n/, "")
