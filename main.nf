@@ -32,6 +32,8 @@ process first_joint_aggregation {
     output:
         tuple val(region), file("${fixed_region}_first_aggregation.vcf.gz") into sample_consensus_sites
     
+    beforeScript 'ulimit -s unlimited'
+    
     script:   
     region = region.replaceAll(/\n/, "")
     fixed_region = region.replaceAll(/[:-]/, "_").replaceAll(/\n/, "")
@@ -107,6 +109,8 @@ process second_joint_aggregation {
 
     output:
         tuple val(region), file("${fixed_region}_second_aggregation.vcf.gz"), file("${fixed_region}_second_aggregation.vcf.gz.tbi") into merge_samples
+
+    beforeScript 'ulimit -s unlimited'
 
     script:
     region = region.replaceAll(/\n/, "")
