@@ -26,9 +26,9 @@ process first_joint_aggregation {
 
     input:
         each file(reference) from first_joint_aggregation_reference
-        tuple val(region), val(first_aggregation_subset), val(index) from first_aggregation_extracted_regions
+        tuple file(region), val(first_aggregation_subset), val(index) from first_aggregation_extracted_regions
     output:
-        tuple val(region), file("${fixed_region}_first_aggregation.vcf.gz") into sample_consensus_sites
+        tuple file(region), file("${fixed_region}_first_aggregation.vcf.gz") into sample_consensus_sites
     
     script:   
     region = region.replaceAll(/\n/, "")
@@ -63,11 +63,11 @@ process merge_consensus_sites {
     memory "600 MB"
 
     input:
-        tuple val(region), file("*_consensus_sites_to_merge.vcf.gz") from grouped_sample_consensus_sites
+        tuple file(region), file("*_consensus_sites_to_merge.vcf.gz") from grouped_sample_consensus_sites
         each file(reference) from merge_consensus_sites_reference
 
     output:
-        tuple val(region), file("sites_with_consensus_samples_${fixed_region}.vcf.gz"), file("sites_with_consensus_samples_${fixed_region}.vcf.gz.csi") into consensus_sites_for_second_aggregation
+        tuple file(region), file("sites_with_consensus_samples_${fixed_region}.vcf.gz"), file("sites_with_consensus_samples_${fixed_region}.vcf.gz.csi") into consensus_sites_for_second_aggregation
     
     script:
     fixed_region = region.replaceAll(/[:-]/, "_").replaceAll(/\n/, "")
@@ -100,11 +100,11 @@ process second_joint_aggregation {
     memory "600 MB"
 
     input:
-        tuple val(region), val(second_aggregation_subset), val(second_aggregation_subset_index), file(merged_consensus_sites), file(merged_consensus_sites_index) from second_aggregation_items
+        tuple file(region), val(second_aggregation_subset), val(second_aggregation_subset_index), file(merged_consensus_sites), file(merged_consensus_sites_index) from second_aggregation_items
         each file(reference) from second_joint_aggregation_reference
 
     output:
-        tuple val(region), file("${fixed_region}_second_aggregation.vcf.gz"), file("${fixed_region}_second_aggregation.vcf.gz.tbi") into merge_samples
+        tuple file(region), file("${fixed_region}_second_aggregation.vcf.gz"), file("${fixed_region}_second_aggregation.vcf.gz.tbi") into merge_samples
 
     script:
     region = region.replaceAll(/\n/, "")
@@ -138,7 +138,7 @@ process merge_chunks {
     publishDir "./results", mode: "copy"
 
     input:
-        tuple val(region), file("*_second_aggregation_subset.vcf.gz"), file("*_second_aggregation_subset.vcf.gz.tbi") from merge_samples.groupTuple()
+        tuple file(region), file("*_second_aggregation_subset.vcf.gz"), file("*_second_aggregation_subset.vcf.gz.tbi") from merge_samples.groupTuple()
     output:
         tuple file("all_chunks_merged_${fixed_region}.vcf.gz"), file("all_chunks_merged_${fixed_region}.vcf.gz.tbi")
     
