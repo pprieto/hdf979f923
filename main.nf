@@ -8,7 +8,7 @@ Channel
     .set{ read_regions_from_s3 }
 Channel
     .fromPath(params.regions_file)
-    .splitCsv(strip: true, limit: 100)
+    .splitCsv(strip: true, limit: params.limit)
     .set{ region }
 Channel
     .fromPath(params.reference)
