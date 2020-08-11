@@ -22,8 +22,8 @@ region
 
 // Parallel for every region and sample batch (region * sample_batch_size)
 process first_joint_aggregation {
-    cpus 4
-    memory "30 GB"
+    cpus 1
+    memory "600 MB"
 
     input:
         each file(reference) from first_joint_aggregation_reference
