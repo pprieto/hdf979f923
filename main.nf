@@ -8,7 +8,6 @@ Channel
     .set{ read_regions_from_s3 }
 Channel
     .fromPath(params.regions_file)
-    .splitText(limit: 5)
     .map { it -> it.trim() }
     .set{ region }
 Channel
