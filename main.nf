@@ -23,7 +23,7 @@ region
 // Parallel for every region and sample batch (region * sample_batch_size)
 process first_joint_aggregation {
     cpus 1
-    memory "600 MB"
+    memory "1 GB"
 
     input:
         each file(reference) from first_joint_aggregation_reference
@@ -60,7 +60,7 @@ sample_consensus_sites
 // Parallel for every region    
 process merge_consensus_sites {
     cpus 1
-    memory "600 MB"
+    memory "1 GB"
 
     input:
         tuple val(region), file("*_consensus_sites_to_merge.vcf.gz") from grouped_sample_consensus_sites
@@ -97,7 +97,7 @@ second_aggregation_items = second_aggregation_extracted_regions
 // Parallel for every region and sample batch (region * sample_batch_size)
 process second_joint_aggregation {
     cpus 4
-    memory "600 MB"
+    memory "1 GB"
 
     input:
         tuple val(region), val(second_aggregation_subset), val(second_aggregation_subset_index), file(merged_consensus_sites), file(merged_consensus_sites_index) from second_aggregation_items
@@ -132,7 +132,7 @@ process second_joint_aggregation {
 // Parallel for every region  
 process merge_chunks {
     cpus 1
-    memory "600 MB"
+    memory "1 GB"
 
     publishDir "./results", mode: "copy"
 
